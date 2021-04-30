@@ -1,4 +1,4 @@
 python-Levenshtein
 whats-that-code
-discordpy
+discord.py
 pyyaml
