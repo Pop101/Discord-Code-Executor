@@ -34,7 +34,7 @@ async def on_message(message):
         language = code_block.split('\n')[0][3:].strip()
         code = '\n'.join(code_block.split('\n')[1:-1]).strip()
         
-        if not code: return # If the code block is empty, ignore
+        if not code: continue # If the code block is empty, ignore
         if not language: # If the language is empty, try to guess
             language = guess_language_all_methods(code)
         
@@ -48,7 +48,6 @@ async def on_message(message):
         
         if language in boilerplates.supported_languages:
             code = boilerplates.add_boilerplate(language, code)
-            print(code)
         
         # Execute code using piston api
         req = requests.post('https://emkc.org/api/v2/piston/execute', json={
@@ -61,6 +60,7 @@ async def on_message(message):
         output = req.json()
 
         # get output or stdout
+        if 'run' not in output: continue
         output = (output['run']['output'] or output['run']['stdout'] or '').strip()
         if output: await message.channel.send(output)
 
